@@ -1,10 +1,16 @@
 vagrant_home = (ENV['VAGRANT_HOME'].to_s.split.join.length > 0) ? ENV['VAGRANT_HOME'] : "#{ENV['HOME']}/.vagrant.d"
 vagrant_dot  = (ENV['VAGRANT_DOTFILE_PATH'].to_s.split.join.length > 0) ? ENV['VAGRANT_DOTFILE_PATH'] : "#{dir}/.vagrant"
 
+
 Vagrant.configure('2') do |config|
   config.vm.box     = "#{data['vm']['box']}"
   config.vm.box_url = "#{data['vm']['box_url']}"
 
+  config.vm.provider "virtualbox" do |v|
+    v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/vagrant", "1"]
+	v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/vflsf_0wkbiuwyr001", "1"]
+  end
+  
   if data['vm']['hostname'].to_s.strip.length != 0
     config.vm.hostname = "#{data['vm']['hostname']}"
   end
@@ -254,6 +260,15 @@ Vagrant.configure('2') do |config|
 
   config.vm.provision :shell, :path => 'puphpet/shell/important-notices.sh'
 
+  config.vm.provision :shell, run: 'always' do |s|
+    s.path = 'puphpet/shell/windows-path-limit-fix.sh'
+    s.args = '/vagrant/node_modules'
+  end
+  config.vm.provision :shell, run: 'always' do |s|
+    s.path = 'puphpet/shell/windows-path-limit-fix.sh'
+    s.args = '/vagrant/.bower-tmp'
+  end
+  
   customKey  = "#{dir}/puphpet/files/dot/ssh/id_rsa"
   vagrantKey = "#{vagrant_dot}/machines/default/#{ENV['VAGRANT_DEFAULT_PROVIDER']}/private_key"
 

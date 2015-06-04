@@ -36,7 +36,7 @@ vagrantfile:
             vflsf_0wkbiuwyr001:
                 source: 'D:\Documents\git\FaisMaVaisselleFilsDePute'
                 target : '/var/www/faismavaissellefdp'
-                sync_type: nfs
+                sync_type: default
                 smb:
                     smb_host: ''
                     smb_username: ''
@@ -49,6 +49,11 @@ vagrantfile:
                     exclude:
                         - .vagrant/
                         - .git/
+                        - node_modules/
+                        - .bower-cache/
+                        - .bower-registry/
+                        - .bower-tmp/
+                        - bower_components/
                     auto: 'true'
                 owner: www-data
                 group: www-data
