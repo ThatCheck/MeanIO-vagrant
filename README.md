@@ -1,3 +1,5 @@
+Lancer les cmd en mode admin 
+
 # MeanIO-vagrant
 Box for mean.io application on vagrant
 
